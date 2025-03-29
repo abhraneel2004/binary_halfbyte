@@ -128,7 +128,7 @@ export function SignUp() {
                 <input
                   id={field}
                   name={field}
-                  type={field === 'email' ? 'email' : 'password'}
+                  type={field === 'email' ? 'email' : field === 'username' ? 'text' : 'password'}
                   required
                   value={formData[field]}
                   onChange={handleChange}
