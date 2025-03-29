@@ -1,16 +1,7 @@
 import React from 'react';
 import { Bookmark, Share2, Clock } from 'lucide-react';
 
-interface NewsCardProps {
-  title: string;
-  description: string;
-  imageUrl: string;
-  source: string;
-  publishedAt: string;
-  url: string;
-}
-
-export function NewsCard({ title, description, imageUrl, source, publishedAt, url }: NewsCardProps) {
+export function NewsCard({ title, description, imageUrl, source, publishedAt, url }) {
   const handleSave = () => {
     // TODO: Implement save functionality
   };
@@ -27,15 +18,12 @@ export function NewsCard({ title, description, imageUrl, source, publishedAt, ur
 
   return (
     <article className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
-      
-      {/* dynamically change the image here */}
-
       <img
         src={imageUrl}
         alt={title}
         className="w-full h-48 object-cover"
         onError={(e) => {
-          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&auto=format&fit=crop';
+          e.target.src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&auto=format&fit=crop';
         }}
       />
       <div className="p-4">

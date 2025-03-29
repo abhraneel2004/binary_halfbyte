@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Settings, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { auth } from '../lib/firebase'; // Corrected import for Firebase authentication
+import { signOut } from 'firebase/auth'; // Importing signOut method from Firebase Auth
 import toast from 'react-hot-toast';
 
-interface SettingsMenuProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function SettingsMenu({ isOpen, onClose }: SettingsMenuProps) {
+export function SettingsMenu({ isOpen, onClose }) {
   const navigate = useNavigate();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -17,8 +13,7 @@ export function SettingsMenu({ isOpen, onClose }: SettingsMenuProps) {
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await signOut(auth); // Correct Firebase sign-out method
       
       toast.success('Successfully logged out');
       navigate('/login');
@@ -80,7 +75,7 @@ export function SettingsMenu({ isOpen, onClose }: SettingsMenuProps) {
                   </svg>
                 </button>
               </div>
-              
+
               <div className="space-y-4">
                 <button
                   onClick={() => setShowLogoutConfirm(true)}

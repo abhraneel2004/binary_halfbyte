@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from 'firebase/auth';
 import toast from 'react-hot-toast';
-
-const loginSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  rememberMe: z.boolean(),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
 
 export function Login() {
   const navigate = useNavigate();
@@ -18,49 +9,34 @@ export function Login() {
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
 
-  const [formData, setFormData] = useState<LoginForm>({
+  const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false,
   });
-  const [errors, setErrors] = useState<Partial<LoginForm>>({});
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
-    if (errors[name as keyof LoginForm]) {
+    if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
 
-  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Validate the form data
-      const validatedData = loginSchema.parse(formData);
-      
-      // Sign in with email and password
-      await signInWithEmailAndPassword(auth, validatedData.email, validatedData.password);
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
       toast.success('Successfully logged in!');
       navigate('/');
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: Partial<LoginForm> = {};
-        error.errors.forEach((err) => {
-          const key = err.path[0] as keyof LoginForm;
-          if (typeof key === 'string') {
-            newErrors[key] = err.message;
-          }
-        });
-        setErrors(newErrors);
-      } else {
-        toast.error('Failed to log in. Please check your credentials.');
-      }
+      toast.error('Failed to log in. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -105,7 +81,6 @@ export function Login() {
             onChange={handleChange}
             className="w-full p-2 border rounded"
           />
-          {errors.email && <p className="text-red-500">{errors.email}</p>}
           <input
             name="password"
             type="password"
@@ -114,7 +89,6 @@ export function Login() {
             onChange={handleChange}
             className="w-full p-2 border rounded"
           />
-          {errors.password && <p className="text-red-500">{errors.password}</p>}
           <div>
             <label className="flex items-center">
               <input

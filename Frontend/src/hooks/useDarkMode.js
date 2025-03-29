@@ -12,7 +12,7 @@ export function useDarkMode() {
   useEffect(() => {
     // Update localStorage when darkMode changes
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
-    
+
     // Update document class
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -21,5 +21,5 @@ export function useDarkMode() {
     }
   }, [darkMode]);
 
-  return [darkMode, setDarkMode] as const;
+  return [darkMode, setDarkMode];
 }

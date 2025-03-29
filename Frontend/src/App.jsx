@@ -4,7 +4,7 @@ import { Newspaper, Settings as SettingsIcon, User } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { NewsCard } from './components/NewsCard';
 import { SearchBar } from './components/SearchBar';
-import { Footer } from './components/Footer';
+import  Footer  from './components/Footer';
 import { Profile } from './components/Profile';
 import { Login } from './components/auth/Login';
 import { SignUp } from './components/auth/SignUp';
@@ -96,18 +96,9 @@ function App() {
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route
-              path="/profile"
-              element={user ? <Profile /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/login"
-              element={!user ? <Login /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/signup"
-              element={!user ? <SignUp /> : <Navigate to="/" />}
-            />
+            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+            <Route path="/signup" element={!user ? <SignUp /> : <Navigate to="/" />} />
           </Routes>
         </div>
 
@@ -117,15 +108,10 @@ function App() {
         </Routes>
 
         {/* Settings Menu */}
-        <SettingsMenu
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-        />
+        <SettingsMenu isOpen={showSettings} onClose={() => setShowSettings(false)} />
 
         {/* Profile Setup */}
-        {showProfileSetup && (
-          <ProfileSetup onComplete={() => setShowProfileSetup(false)} />
-        )}
+        {showProfileSetup && <ProfileSetup onComplete={() => setShowProfileSetup(false)} />}
       </div>
     </Router>
   );
