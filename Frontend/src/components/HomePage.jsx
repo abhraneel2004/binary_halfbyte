@@ -2,11 +2,45 @@ import React, { useState, useEffect } from 'react';
 import { NewsCard } from './NewsCard';
 import { SearchBar } from './SearchBar';
 
+async function processText(data) {
+  // const text = data;
+  console.log(typeof data);
+  let data2 = data;
+  if (!data2) {
+      // outputDiv.innerHTML = "Please enter some text!";
+      return;
+  }
+
+  try{
+      
+      // console.log(arr);
+      const response = await fetch("http://localhost:8000/api/generateText", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              prompt: data2
+          })
+
+      });
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+      const data = await response.json();
+      
+      return data;
+
+  } catch (error){
+      console.error("Error:", error);
+  }
+}
+
 export function HomePage() {
   const [news, setNews] = useState([])
 
   // Optional: Make query dynamic later
-  const query = "everything?q=india&from=2025-03-26&to=2025-03-29&sortBy=popularity"
+  let topic = "Coding"
+  const query = "top-headlines?q="+topic+"&from=2025-03-26&to=2025-03-29&sortBy=popularity"
   const apiKey = "d3edc3f3c4d14b2e949dfd85b53ce325"
 
   const getNews = async () => {
@@ -15,6 +49,16 @@ export function HomePage() {
           const response = await fetch(url)
           const json = await response.json()
           if (json.articles) {
+              // console.log(json.articles)
+              // console.log(json.articles[0].description)
+              // json.articles.description = processText(json.articles);
+              for(let i = 0; i< json.articles.length; i++){
+                // json.articles[i].description = processText(json.articles[i].description);
+                console.log('from homepage: '+json.articles[i].description);
+                // console.log("json.articles[i]);
+                
+              }
+              // console.log(typeof json.articles);
               setNews(json.articles)
           } else {
               console.error('Error fetching articles:', json)
