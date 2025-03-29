@@ -45,10 +45,6 @@ export function Profile() {
                 <p className="text-gray-600 dark:text-gray-300">Member since March 2025</p>
               </div>
             </div>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              <Settings className="w-5 h-5" />
-              <span>Settings</span>
-            </button>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">

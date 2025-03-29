@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { auth } from '../../lib/firebase'; // FIXED: Correct import
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'; // FIXED: Correct Firebase methods
+import { auth } from '../../lib/firebase';
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
 import toast from 'react-hot-toast';
+import { FcGoogle } from 'react-icons/fc';
+import { FaGithub } from 'react-icons/fa';
 
 const signUpSchema = z.object({
   username: z.string()
@@ -42,22 +50,42 @@ export function SignUp() {
     }
   };
 
+  // Google Sign Up
+  const handleGoogleSignUp = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      toast.success(`Welcome, ${result.user.displayName}!`);
+      navigate('/');
+    } catch (error) {
+      toast.error('Google sign-up failed. Please try again.');
+    }
+  };
+
+  // GitHub Sign Up
+  const handleGitHubSignUp = async () => {
+    try {
+      const provider = new GithubAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      toast.success(`Welcome, ${result.user.displayName}!`);
+      navigate('/');
+    } catch (error) {
+      toast.error('GitHub sign-up failed. Please try again.');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const validatedData = signUpSchema.parse(formData);
-
-      // FIXED: Correct Firebase Authentication method
       const userCredential = await createUserWithEmailAndPassword(auth, validatedData.email, validatedData.password);
-
-      // Update the user's profile with their username
       await updateProfile(userCredential.user, {
         displayName: validatedData.username,
       });
 
-      toast.success('Account created successfully! Please check your email to verify your account.');
+      toast.success('Account created successfully!');
       navigate('/login');
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -69,7 +97,7 @@ export function SignUp() {
         });
         setErrors(newErrors);
       } else {
-        toast.error(error.message || 'Failed to create account. Please try again.');
+        toast.error(error.message || 'Failed to create account.');
       }
     } finally {
       setLoading(false);
@@ -85,53 +113,53 @@ export function SignUp() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Already have an account?{' '}
-            <Link
-              to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
-            >
+            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
               Sign in
             </Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
-            {[
-              { id: 'username', label: 'Username', type: 'text' },
-              { id: 'email', label: 'Email address', type: 'email' },
-              { id: 'password', label: 'Password', type: 'password' },
-              { id: 'confirmPassword', label: 'Confirm Password', type: 'password' },
-            ].map(({ id, label, type }) => (
-              <div key={id}>
-                <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {label}
+            {['username', 'email', 'password', 'confirmPassword'].map((field) => (
+              <div key={field}>
+                <label htmlFor={field} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {field.charAt(0).toUpperCase() + field.slice(1)}
                 </label>
                 <input
-                  id={id}
-                  name={id}
-                  type={type}
+                  id={field}
+                  name={field}
+                  type={field === 'email' ? 'email' : field === 'username' ? 'text' : 'password'}
                   required
-                  value={formData[id]}
+                  value={formData[field]}
                   onChange={handleChange}
-                  className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
-                    errors[id] ? 'border-red-300' : 'border-gray-300'
-                  } dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700`}
+                  className={`mt-1 block w-full px-3 py-2 border ${errors[field] ? 'border-red-300' : 'border-gray-300'
+                    } dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700`}
                 />
-                {errors[id] && <p className="mt-1 text-sm text-red-600">{errors[id]}</p>}
+                {errors[field] && <p className="mt-1 text-sm text-red-600">{errors[field]}</p>}
               </div>
             ))}
           </div>
 
-          <div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            {loading ? 'Creating...' : 'Create Account'}
+          </button>
+
+          <div className="mt-4 flex flex-col space-y-2">
             <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleGoogleSignUp}
+              className="flex items-center justify-center w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 text-gray-700"
             >
-              {loading ? (
-                <div className="w-5 h-5 border-t-2 border-white rounded-full animate-spin"></div>
-              ) : (
-                'Create Account'
-              )}
+              <FcGoogle className="mr-2" /> Sign up with Google
+            </button>
+            <button
+              onClick={handleGitHubSignUp}
+              className="flex items-center justify-center w-full px-4 py-2 bg-gray-800 text-white border border-gray-800 rounded-md shadow-sm hover:bg-gray-900 dark:border dark:border-gray-300"
+            >
+              <FaGithub className="mr-2" /> Sign up with GitHub
             </button>
           </div>
         </form>
