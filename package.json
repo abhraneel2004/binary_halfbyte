@@ -1,0 +1,22 @@
+
+
+{
+  "name": "news60",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "client": "npm --prefix Frontend start",
+    "client:install": "npm install --prefix Frontend",
+    "server": "nodemon Backend/index.js",
+    "server:install": "npm install --prefix Backend",
+    "dev": "concurrently \"npm run Backend\" \"npm run Backend\"",
+    "install-all": "npm run Frontend:install && npm run Backend:install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "nodemon": "^3.0.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
