@@ -24,16 +24,15 @@ export function SavedArticlesProvider({ children }) {
 
   // Function to save a new article
   const saveArticle = (article) => {
-    // Check if article is already saved
     const isDuplicate = savedArticles.some((savedArticle) => savedArticle.url === article.url);
 
     if (!isDuplicate) {
       setSavedArticles((prevArticles) => {
-        const newSavedArticles = [...prevArticles, { 
-          ...article, 
-          savedAt: new Date().toISOString() 
+        const newSavedArticles = [...prevArticles, {
+          ...article,
+          savedAt: new Date().toISOString()
         }];
-        localStorage.setItem('savedArticles', JSON.stringify(newSavedArticles)); // Sync to localStorage immediately
+        localStorage.setItem('savedArticles', JSON.stringify(newSavedArticles));
         return newSavedArticles;
       });
       return true;
@@ -45,7 +44,7 @@ export function SavedArticlesProvider({ children }) {
   const removeArticle = (url) => {
     setSavedArticles((prevArticles) => {
       const updatedArticles = prevArticles.filter((article) => article.url !== url);
-      localStorage.setItem('savedArticles', JSON.stringify(updatedArticles)); // Sync to localStorage immediately
+      localStorage.setItem('savedArticles', JSON.stringify(updatedArticles));
       return updatedArticles;
     });
   };
@@ -53,6 +52,18 @@ export function SavedArticlesProvider({ children }) {
   return (
     <SavedArticlesContext.Provider value={{ savedArticles, saveArticle, removeArticle }}>
       {children}
+      {/* <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg mt-4">
+        <h3 className="text-lg font-semibold mb-2">Saved Article URLs:</h3>
+        <div className="space-y-2"> */}
+          {/* {savedArticles.map((article, index) => ( */}
+      {/* //       <div key={index} className="p-2 bg-white dark:bg-gray-700 rounded-md">
+      //         <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+      //           {article.url}
+      //         </a>
+      //       </div>
+      //     ))}
+      //   </div>
+      // </div> */}
     </SavedArticlesContext.Provider>
   );
 }

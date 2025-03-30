@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { auth } from '../lib/firebase';
+import { auth } from '../../lib/firebase';
 import {
   createUserWithEmailAndPassword,
   updateProfile,
