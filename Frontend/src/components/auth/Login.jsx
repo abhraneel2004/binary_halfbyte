@@ -119,13 +119,7 @@ export function Login() {
             <FcGoogle className="mr-2 text-xl" />
             Sign in with Google
           </button>
-          <button
-            onClick={handleGithubLogin}
-            className="flex items-center justify-center w-full px-4 py-2 bg-gray-800 text-white border border-gray-800 rounded-md shadow-sm hover:bg-gray-900 dark:border dark:border-gray-300"
-          >
-            <FaGithub className="mr-2 text-xl" />
-            Sign in with GitHub
-          </button>
+          
         </div>
         <Link
           to="/signup"
