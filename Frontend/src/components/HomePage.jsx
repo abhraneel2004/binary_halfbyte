@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { NewsCard } from './NewsCard';
 import { SearchBar } from './SearchBar';
+// import module from 'module';
+
+// const module = await import('module');
+
+// var lexrank = require('lexrank');
+
+// import lexrank from 'lexrank';
 
 export function HomePage() {
   const [news, setNews] = useState([]);
@@ -30,8 +37,27 @@ export function HomePage() {
 
       const response = await fetch(url);
       const json = await response.json();
+      
       if (json.articles) {
-        setNews(json.articles);
+        try {
+          // for(let i = 0; i < json.articles.length; i++){
+          //   var originalText = json.articles[i].content;
+          //   var topLines = lexrank.summarize(originalText, 5, function (err, toplines, text) {
+          //     if (err) {
+          //       console.log(err);
+          //     }
+          //     console.log(toplines);
+            
+          //     console.log(text);
+          //   });
+          //   console.log(topLines);
+          // }
+
+          setNews(json.articles);
+        } catch (error) {
+          console.log(error);
+        }
+
       } else {
         console.error('Error fetching articles:', json);
       }
@@ -44,7 +70,8 @@ export function HomePage() {
 
   useEffect(() => {
     getNews();
-  }, [category, searchItem]);
+    // }, [category, searchItem]);
+  }, []);
 
   const handleSearch = (query, selectedCategory) => {
     setSearchItem(query);
@@ -67,7 +94,7 @@ export function HomePage() {
               <NewsCard
                 key={`${article.url}-${index}`}
                 title={article.title}
-                description={article.description}
+                description={article.content}
                 imageUrl={article.urlToImage}
                 source={article.source.name}
                 publishedAt={article.publishedAt}

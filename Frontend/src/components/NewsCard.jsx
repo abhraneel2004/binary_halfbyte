@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bookmark, Share2, Clock } from 'lucide-react';
 
+
 export function NewsCard({ title, description, imageUrl, source, publishedAt, url }) {
   const handleSave = () => {
     // TODO: Implement save functionality
