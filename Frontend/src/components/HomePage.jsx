@@ -8,7 +8,7 @@ export function HomePage() {
   const [searchItem, setSearchItem] = useState('');
   const [category, setCategory] = useState('general');
 
-  const apiKey = "d3edc3f3c4d14b2e949dfd85b53ce325";
+  const apiKey = "6c17f1839cbb48d4840e6e70370799a2";
 
   const getNews = async () => {
     try {
