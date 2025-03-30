@@ -2,7 +2,6 @@ import React from 'react';
 import { Bookmark, BookmarkCheck, Share2, Clock } from 'lucide-react';
 import { useSavedArticles } from './SavedArticlesContext';
 
-
 export function NewsCard({ title, description, imageUrl, source, publishedAt, url }) {
   const { savedArticles, saveArticle, removeArticle } = useSavedArticles();
   
