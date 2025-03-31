@@ -41,7 +41,7 @@ Ensure you have the following installed:
 ### Steps to Run the Project Locally
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/news60.git
+   git clone https://github.com/abhraneel2004/binary_halfbyte.git
    cd binary_halfbyte
    ```
 2. Install dependencies:
