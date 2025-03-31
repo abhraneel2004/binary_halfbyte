@@ -42,7 +42,7 @@ Ensure you have the following installed:
 1. Clone the repository:
    ```sh
    git clone https://github.com/yourusername/news60.git
-   cd news60
+   cd binary_halfbyte
    ```
 2. Install dependencies:
    ```sh
